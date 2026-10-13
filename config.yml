@@ -1,0 +1,11 @@
+# 改成你的友链页面地址
+link_page: "https://damaifuquan99.github.io/links-%E5%8F%8B%E9%93%BE/"
+article_count: 100
+output_file: "friend.json"
+
+# 友链元素选择器，和后面页面里的HTML对应
+item_selector: ".friend-item"
+name_selector: ".friend-name"
+link_selector: ".friend-link"
+avatar_selector: ".friend-avatar"
+rss_selector: ".friend-rss"
