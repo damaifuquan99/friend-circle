@@ -1,25 +1,32 @@
 name: Friend Circle Update
-
 on:
   schedule:
-    - cron: '0 0 * * *'  # 每天北京时间8点自动更新一次
-  workflow_dispatch:      # 允许手动触发
+    - cron: '0 0 * * *' # UTC时间0点 = 北京时间早上8点自动执行
+  workflow_dispatch: # 支持手动点按钮测试
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout 当前仓库
+        uses: actions/checkout@v4
 
+      # 拉取柳神原版Friend-Circle-Lite源码
+      - name: Clone Friend-Circle-Lite
+        run: git clone https://gitea.dusays.com/LiuShen/Friend-Circle-Lite.git fc-lite
+
+      # 安装python依赖，执行抓取脚本
       - name: Run Friend-Circle-Lite
-        uses: Luminous-0905/Friend-Circle-Lite@main
-        with:
-          config_path: config.yml
+        run: |
+          cd fc-lite
+          pip install -r requirements.txt
+          python main.py --config ../config.yml
 
+      # 提交生成的 friend.json
       - name: Commit & Push
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add friend.json
-          git commit -m "Update friend.json" || echo "No changes to commit"
+          git commit -m "Update friend.json" || echo "no changes to commit"
           git push
